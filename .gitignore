@@ -1,0 +1,7 @@
+/Backend-node/node_modules
+/Backend-node/.env
+/Backend-node/.DS_Store
+
+/Frontend-react/node_modules
+/Frontend-react/.env
+/Frontend-react/.DS_Store
