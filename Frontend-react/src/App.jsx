@@ -1,7 +1,9 @@
-import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router";
-import { AuthProvider } from "./shared/context/AuthContext";
+import styles from "./App.module.css";
+import { Routes, Route, Navigate, Outlet } from "react-router";
 import { useAuth } from "./shared/context/AuthContext";
+
+import Header from "./shared/components/Header";
+import StatsBar from "./shared/components/StatsBar";
 
 import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
@@ -24,9 +26,19 @@ function PublicOnly() {
 }
 
 function App() {
+	const { state, dispatch } = useAuth();
+
 	return (
-		<AuthProvider>
-			<BrowserRouter>
+		<div className={styles["app"]}>
+			<Header title={"Farm Game"} states={state} />
+			<hr />
+			<StatsBar
+				Currency="100"
+				Energy="100"
+				states={state}
+				dispatch={dispatch}
+			/>
+			<div className={styles["container"]}>
 				<Routes>
 					<Route element={<PublicOnly />}>
 						<Route path="/login" element={<LoginPage />} />
@@ -35,13 +47,12 @@ function App() {
 
 					<Route element={<RequireAuth />}>
 						<Route path="/" element={<>home</>} />
-						{/* más rutas protegidas */}
 					</Route>
 
 					<Route path="*" element={<Navigate to="/" replace />} />
 				</Routes>
-			</BrowserRouter>
-		</AuthProvider>
+			</div>
+		</div>
 	);
 }
 

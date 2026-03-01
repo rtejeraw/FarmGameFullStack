@@ -17,7 +17,7 @@ export const LoginForm = () => {
 		<form onSubmit={handleSubmit}>
 			<Input
 				type="email"
-				label="Correo electrónico"
+				label="Email"
 				value={email}
 				onChange={(e) => setEmail(e.target.value)}
 				required
@@ -25,7 +25,7 @@ export const LoginForm = () => {
 
 			<Input
 				type="password"
-				label="Contraseña"
+				label="Password"
 				value={password}
 				onChange={(e) => setPassword(e.target.value)}
 				required
@@ -34,7 +34,7 @@ export const LoginForm = () => {
 			{error && <FormError message={error} />}
 
 			<Button type="submit" isLoading={isLoading} fullWidth>
-				{isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+				{isLoading ? "Logging in..." : "Login"}
 			</Button>
 		</form>
 	);

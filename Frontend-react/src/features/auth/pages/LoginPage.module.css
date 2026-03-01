@@ -1,0 +1,39 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 50px;
+	justify-content: center;
+	margin-top: 50px;
+	background-color: var(--assent2-color);
+	padding: 20px 60px;
+	border: 1px solid var(--assent-color);
+	border-radius: 16px;
+	color: var(--assent-color);
+	& h1 {
+		justify-self: center;
+		font-size: 40px;
+		color: var(--assent-color);
+		margin-bottom: 0px;
+	}
+	& p {
+		font-size: 22px;
+		color: var(--green-color);
+		margin: 0px;
+	}
+	& form {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		gap: 10px;
+		width: 100%;
+	}
+	& a {
+		text-decoration: none;
+		color: var(--white-color);
+		font-weight: 600;
+	}
+	& a:hover {
+		color: var(--primary-color);
+	}
+}

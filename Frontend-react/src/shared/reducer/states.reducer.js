@@ -1,4 +1,4 @@
-export const initialState = {
+export const initialStates = {
 	token: null,
 	isAuthenticated: false,
 	isLoading: true,
@@ -16,7 +16,7 @@ export const actions = {
 	CLEAR_ERROR: "clear_error",
 };
 
-export function reducer(state = initialState, action) {
+export function reducer(state = initialStates, action) {
 	switch (action.type) {
 		case actions.CHECK_TOKEN: {
 			const storedToken = localStorage.getItem("token");
@@ -72,8 +72,12 @@ export function reducer(state = initialState, action) {
 			localStorage.removeItem("token");
 			// localStorage.removeItem("user"); // si lo guardaste
 			return {
-				...initialState,
-				isLoading: false, // ya terminamos de cargar
+				...state,
+				token: null,
+				isAuthenticated: false,
+				isLoading: false,
+				user: null,
+				errorMessage: "",
 			};
 
 		case actions.SET_ERROR:

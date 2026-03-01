@@ -1,0 +1,13 @@
+.button {
+	padding: 8px 32px;
+	border: none;
+	border-radius: 16px;
+	color: var(--secundary-color);
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 600;
+	background-color: var(--assent-color);
+	&:hover {
+		background-color: var(--green-color);
+	}
+}

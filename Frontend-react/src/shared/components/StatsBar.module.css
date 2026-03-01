@@ -1,0 +1,24 @@
+.statsBar {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 40px;
+}
+.element {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: center;
+	& h4 {
+		margin: 0;
+		font-size: 20px;
+		color: var(--assent-color);
+	}
+	& p {
+		margin: 0;
+		font-size: 25px;
+		font-weight: bold;
+		color: var(--white-color);
+	}
+}
