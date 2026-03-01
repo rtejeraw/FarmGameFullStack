@@ -18,7 +18,6 @@ export const RegisterForm = () => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
 
-		// Limpiar error del campo al escribir
 		if (fieldErrors[name]) {
 			setFieldErrors((prev) => ({ ...prev, [name]: "" }));
 		}
@@ -28,23 +27,23 @@ export const RegisterForm = () => {
 		const errors = {};
 
 		if (!formData.name.trim()) {
-			errors.name = "El nombre es obligatorio";
+			errors.name = "Name is required";
 		}
 
 		if (!formData.email) {
-			errors.email = "El correo es obligatorio";
+			errors.email = "Email is required";
 		} else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-			errors.email = "Correo inválido";
+			errors.email = "Invalid email";
 		}
 
 		if (!formData.password) {
-			errors.password = "La contraseña es obligatoria";
+			errors.password = "Password is required";
 		} else if (formData.password.length < 6) {
-			errors.password = "Mínimo 6 caracteres";
+			errors.password = "Minimum 6 characters";
 		}
 
 		if (formData.password !== formData.confirmPassword) {
-			errors.confirmPassword = "Las contraseñas no coinciden";
+			errors.confirmPassword = "Passwords do not match";
 		}
 
 		setFieldErrors(errors);
@@ -56,7 +55,6 @@ export const RegisterForm = () => {
 
 		if (!validateForm()) return;
 
-		// Solo enviamos los campos necesarios al backend
 		const payload = {
 			name: formData.name.trim(),
 			email: formData.email.trim(),
@@ -69,54 +67,50 @@ export const RegisterForm = () => {
 	return (
 		<form onSubmit={handleSubmit}>
 			<Input
-				label="Nombre completo"
+				label="Name"
 				type="text"
 				name="name"
 				value={formData.name}
 				onChange={handleChange}
-				placeholder="Tu nombre"
 				required
 				error={fieldErrors.name}
 			/>
 
 			<Input
-				label="Correo electrónico"
+				label="Email"
 				type="email"
 				name="email"
 				value={formData.email}
 				onChange={handleChange}
-				placeholder="tu@correo.com"
 				required
 				error={fieldErrors.email}
 			/>
 
 			<Input
-				label="Contraseña"
+				label="Password"
 				type="password"
 				name="password"
 				value={formData.password}
 				onChange={handleChange}
-				placeholder="Mínimo 6 caracteres"
 				required
 				error={fieldErrors.password}
 			/>
 
 			<Input
-				label="Confirmar contraseña"
+				label="Confirm Password"
 				type="password"
 				name="confirmPassword"
 				value={formData.confirmPassword}
 				onChange={handleChange}
-				placeholder="Repite la contraseña"
 				required
 				error={fieldErrors.confirmPassword}
 			/>
 
-			<FormError message={error} />
-
 			<Button type="submit" isLoading={isLoading} fullWidth>
-				{isLoading ? "Creando cuenta..." : "Registrarse"}
+				{isLoading ? "Creating account..." : "Register"}
 			</Button>
+
+			<FormError message={error} />
 		</form>
 	);
 };

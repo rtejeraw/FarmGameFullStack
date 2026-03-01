@@ -1,19 +1,18 @@
 import { Link } from "react-router";
 import { RegisterForm } from "../components/RegisterForm";
+import styles from "./RegisterPage.module.css";
 
 export default function RegisterPage() {
 	return (
-		<div>
+		<div className={styles["container"]}>
 			<div>
-				<h1>Regístrate</h1>
-				<p>Completa el formulario para registrarte</p>
-
-				<RegisterForm />
-
-				<p>
-					¿No tienes una cuenta?{" "}
-					<Link to="/login">Inicia sesión aquí</Link>
-				</p>
+				<h1>Register</h1>
+				<p>Complete the form to register</p>
+			</div>
+			<RegisterForm />
+			<div>
+				<p>Do you have an account?</p>
+				<a href="/login">Log in here</a>
 			</div>
 		</div>
 	);

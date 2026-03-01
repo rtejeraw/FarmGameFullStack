@@ -1,0 +1,47 @@
+.container {
+	position: relative;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.wrapper {
+	position: relative;
+	width: 100%;
+}
+
+.input {
+	width: 86%;
+	padding: 0.5rem 1rem;
+	border-radius: 24px;
+	font-size: 1rem;
+	line-height: 1.5;
+	background: var(--assent-color);
+	border: 3px solid transparent;
+	transition: border-color 0.15s ease;
+}
+
+.input:focus {
+	outline: none;
+	border: 3px solid var(--green-color);
+}
+
+.label {
+	position: absolute;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--secundary-color);
+	font-size: 1rem;
+	pointer-events: none;
+	transition: opacity 0.18s ease;
+	opacity: 1;
+}
+
+.input:focus + .label {
+	opacity: 0;
+}
+
+.input:not(:placeholder-shown) + .label {
+	opacity: 0;
+}

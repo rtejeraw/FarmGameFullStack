@@ -1,34 +1,40 @@
-import React from "react";
+import { React, useId } from "react";
+import styles from "./Input.module.css";
 
 const Input = ({
 	label,
 	type = "text",
 	value,
 	onChange,
-	placeholder,
+	placeholder = " ",
 	required = false,
-	error,
+	id,
 	...props
 }) => {
+	const generatedId = useId();
+	const inputId = id || generatedId;
+
 	return (
-		<div>
-			{label && (
-				<label>
-					{label}
-					{required && <b>*</b>}
-				</label>
-			)}
+		<div className={styles.container}>
+			<div className={styles.wrapper}>
+				<input
+					id={inputId}
+					type={type}
+					value={value}
+					onChange={onChange}
+					placeholder={placeholder}
+					required={required}
+					className={styles.input}
+					{...props}
+				/>
 
-			<input
-				type={type}
-				value={value}
-				onChange={onChange}
-				placeholder={placeholder}
-				required={required}
-				{...props}
-			/>
-
-			{error && <p>{error}</p>}
+				{label && (
+					<label htmlFor={inputId} className={styles.label}>
+						{label}
+						{required && <span className={styles.required}></span>}
+					</label>
+				)}
+			</div>
 		</div>
 	);
 };

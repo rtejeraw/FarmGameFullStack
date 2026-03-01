@@ -11,17 +11,14 @@ export const useLogin = () => {
 		try {
 			const { token, user } = await loginUser(credentials);
 
-			// Guardamos en localStorage y actualizamos contexto global
 			dispatch({
 				type: actions.LOGIN_SUCCESS,
 				payload: { token, user },
 			});
 
-			// Redirección (opcional, ya que RequireAuth lo puede manejar)
 			navigate("/", { replace: true });
 		} catch (err) {
-			const message =
-				err.response?.data?.message || "Error al iniciar sesión";
+			const message = err.response?.data?.message || "Error logging in";
 			dispatch({
 				type: actions.SET_ERROR,
 				payload: { message: message },
@@ -38,5 +35,30 @@ export const useLogin = () => {
 		}
 	};
 
-	return { login, isLoading: state.isLoading, error: state.errorMessage };
+	const logout = () => {
+		try {
+			dispatch({
+				type: actions.LOGOUT,
+			});
+			navigate("/login", { replace: true });
+		} catch (err) {
+			const message = err.response?.data?.message || "Error logging out";
+			dispatch({
+				type: actions.SET_ERROR,
+				payload: { message: message },
+			});
+		} finally {
+			dispatch({
+				type: actions.SET_LOADING,
+				payload: { isLoading: false },
+			});
+		}
+	};
+
+	return {
+		login,
+		logout,
+		isLoading: state.isLoading,
+		error: state.errorMessage,
+	};
 };
