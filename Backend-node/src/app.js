@@ -28,15 +28,13 @@ app.use(xss());
 
 // Routes
 import authRouter from "./routes/auth.js";
-// import usersRouter from "./routes/users.js";
+import unitsRouter from "./routes/units.js";
+import inventoryRouter from "./routes/inventory.js";
 
 app.use("/api/v1/auth", authRouter);
-//app.use("/api/v1/Users", authenticationMiddleware, usersRouter);
 
-// Rutas separadas → import { router } from './routes.js'
-app.use("/api/v1/test", authenticationMiddleware, (req, res) => {
-	res.json({ message: "¡Ruta de prueba exitosa!" });
-});
+app.use("/api/v1/units", authenticationMiddleware, unitsRouter);
+app.use("/api/v1/inventory", authenticationMiddleware, inventoryRouter);
 
 // error handler
 import notFoundMiddleware from "./middlewares/not-found.js";
