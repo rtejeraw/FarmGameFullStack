@@ -1,0 +1,63 @@
+.container {
+	position: relative;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.wrapper {
+	position: relative;
+	width: 86%;
+}
+
+.select {
+	width: 100%;
+	padding: 0.5rem 2.5rem 0.5rem 1rem;
+	border-radius: 24px;
+	font-size: 1rem;
+	line-height: 1.5;
+	background: var(--assent-color);
+	border: 2px solid transparent;
+	transition: border-color 0.15s ease;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	color: inherit;
+}
+
+.select:focus {
+	outline: none;
+	border: 2px solid var(--green-color);
+}
+
+.select:focus + .label {
+	opacity: 0;
+}
+
+.select::-ms-expand {
+	display: none;
+	border-radius: 24px 24px 0px 0px;
+}
+
+.wrapper::after {
+	content: "▼";
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	pointer-events: none;
+	font-size: 0.9rem;
+	color: var(--dark-color);
+	transition: color 0.15s ease;
+}
+
+.select:focus {
+	outline: none;
+	border: 2px solid var(--green-color);
+	box-shadow: 0 0 0 1px var(--green-color);
+}
+
+.select:open {
+	border-radius: 24px 24px 0px 0px;
+	border-bottom: 2px solid transparent;
+}

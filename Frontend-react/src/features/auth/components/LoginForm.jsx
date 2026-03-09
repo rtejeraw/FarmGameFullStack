@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useLogin } from "../hooks/useLogin";
+import { useAuth } from "../../../shared/context/AuthContext";
 import { Button, Input, FormError } from "../../../shared/components";
 
 export const LoginForm = () => {
-	const { login, isLoading, error } = useLogin();
+	const { login } = useLogin();
+	const { state } = useAuth();
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -31,10 +33,10 @@ export const LoginForm = () => {
 				required
 			/>
 
-			{error && <FormError message={error} />}
+			{state.errorMessage && <FormError message={state.errorMessage} />}
 
-			<Button type="submit" isLoading={isLoading} fullWidth>
-				{isLoading ? "Logging in..." : "Login"}
+			<Button type="submit" isLoading={state.isLoading} fullWidth>
+				{state.isLoading ? "Logging in..." : "Login"}
 			</Button>
 		</form>
 	);

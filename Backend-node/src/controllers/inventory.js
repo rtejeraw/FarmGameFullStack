@@ -1,16 +1,26 @@
 import Inventory from "../models/Inventory.js";
 import { StatusCodes } from "http-status-codes";
-import {
-	BadRequestError,
-	CustomAPIError,
-	NotFoundError,
-} from "../errors/index.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 import Unit from "../models/Unit.js";
 import User from "../models/User.js";
 
 const getInventory = async (req, res) => {
-	const inventory = await Inventory.find({ user: req.user.userId });
-	res.status(StatusCodes.OK).json({ inventory });
+	const authHeader = req.headers.authorization;
+	if (!authHeader || !authHeader.startsWith("Bearer ")) {
+		throw new UnauthenticatedError("No token provided");
+	}
+
+	const token = authHeader.split(" ")[1];
+	const payload = JSON.parse(atob(token.split(".")[1]));
+
+	const inventory = await Inventory.findOne({
+		user: payload.userId,
+	})
+		.populate("seeds.unit")
+		.populate("crops.unit")
+		.populate("breeds.unit")
+		.populate("animals.unit");
+	res.status(StatusCodes.OK).json(inventory);
 };
 
 const newInventory = async (req, res) => {
@@ -96,7 +106,7 @@ const buySellUnit = async (req, res) => {
 
 	const coinCost = unit.coinCost * amount;
 	if (amount > 0 && user.coins < coinCost)
-		throw new CustomAPIError("You don't have enough coins.");
+		throw new BadRequestError("You don't have enough coins.");
 
 	user.coins -= coinCost;
 	await user.save();

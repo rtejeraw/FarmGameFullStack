@@ -11,22 +11,28 @@ function StatsBar({ Currency, Energy, states }) {
 				<></>
 			) : (
 				<div className={styles["statsBar"]}>
-					<div className={styles["element"]}>
-						<h4>Currency</h4>
-						<p>{Currency}</p>
+					<div>
+						<h2>Welcome,</h2>
+						<p>{/* <b>{states.user.name}</b> */}</p>
 					</div>
-					<div className={styles["element"]}>
-						<h4>Energy</h4>
-						<p>{Energy}</p>
+					<div>
+						<div className={styles["element"]}>
+							<h4>Currency</h4>
+							<p>{Currency}</p>
+						</div>
+						<div className={styles["element"]}>
+							<h4>Energy</h4>
+							<p>{Energy}</p>
+						</div>
+						<Button
+							onClick={() => {
+								logout();
+							}}
+							fullWidth
+						>
+							Logout
+						</Button>
 					</div>
-					<Button
-						onClick={() => {
-							logout();
-						}}
-						fullWidth
-					>
-						Logout
-					</Button>
 				</div>
 			)}
 			;
