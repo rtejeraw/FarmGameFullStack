@@ -1,18 +1,13 @@
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../../shared/context/AuthContext";
 import { registerUser } from "../api/authApi";
-import { actions } from "../../../shared/reducer/states.reducer.js";
 
 export const useRegister = () => {
-	const { dispatch } = useAuth();
+	const { loginSuccess, loginFailure, setLoading, setError } = useAuth();
 	const navigate = useNavigate();
 
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState(null);
-
 	const register = async (userData) => {
-		setIsLoading(true);
+		setLoading(true);
 		setError(null);
 
 		try {
@@ -22,10 +17,7 @@ export const useRegister = () => {
 			const { token, user } = response;
 
 			// Guardamos token y actualizamos estado global
-			dispatch({
-				type: actions.LOGIN_SUCCESS, // reutilizamos la acción de login
-				payload: { token, user },
-			});
+			loginSuccess(token, user);
 
 			// Redirigir al home o dashboard
 			navigate("/", { replace: true });
@@ -36,14 +28,11 @@ export const useRegister = () => {
 				"No pudimos crear la cuenta. Intenta nuevamente.";
 			setError(message);
 
-			dispatch({
-				type: actions.LOGIN_FAILURE,
-				payload: { message },
-			});
+			loginFailure(message);
 		} finally {
-			setIsLoading(false);
+			setLoading(false);
 		}
 	};
 
-	return { register, isLoading, error };
+	return { register };
 };
