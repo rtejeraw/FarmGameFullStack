@@ -1,6 +1,8 @@
-import User from "../models/User.js";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
+import { createUser, findUserBy } from "../services/users.js";
+import { createInventory } from "../services/inventory.js";
+import { createPlot } from "../services/plots.js";
 
 const register = async (req, res) => {
 	const { name, email, password } = req.body;
@@ -9,8 +11,20 @@ const register = async (req, res) => {
 		throw new BadRequestError("Please provide name, email and password");
 	}
 
-	const user = await User.create({ ...req.body });
+	const user = await createUser({ ...req.body });
 	const token = user.createJWT();
+
+	//Create inventory
+	await createInventory(user.id);
+	//Create default plots
+	// let i = 0;
+	// while (i < 5) {
+	// 	newPlot({ body: { user: user._id } });
+	// 	i++;
+	// }
+	for (let i = 0; i < 5; i++) {
+		await createPlot({ user: user._id });
+	}
 
 	res.status(StatusCodes.CREATED).json({
 		user: {
@@ -30,7 +44,7 @@ const login = async (req, res) => {
 		throw new BadRequestError("Please provide email and password");
 	}
 
-	const user = await User.findOne({ email });
+	const user = await findUserBy({ email });
 	if (!user) throw new UnauthenticatedError("Invalid Credentials");
 
 	if (!(await user.checkPassword(password)))
