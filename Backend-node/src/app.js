@@ -28,13 +28,16 @@ app.use(xss());
 
 // Routes
 import authRouter from "./routes/auth.js";
+import usersRouter from "./routes/users.js";
 import unitsRouter from "./routes/units.js";
 import inventoryRouter from "./routes/inventory.js";
+import plotsRouter from "./routes/plots.js";
 
 app.use("/api/v1/auth", authRouter);
-
+app.use("/api/v1/users", authenticationMiddleware, usersRouter);
 app.use("/api/v1/units", authenticationMiddleware, unitsRouter);
 app.use("/api/v1/inventory", authenticationMiddleware, inventoryRouter);
+app.use("/api/v1/plots", authenticationMiddleware, plotsRouter);
 
 // error handler
 import notFoundMiddleware from "./middlewares/not-found.js";
