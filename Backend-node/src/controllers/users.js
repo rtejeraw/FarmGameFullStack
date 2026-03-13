@@ -34,10 +34,9 @@ const updateUser = async (req, res) => {
 	try {
 		const {
 			params: { id: userId },
-			body: { user },
 		} = req;
 
-		const updatedUser = await editUser(userId, user);
+		const updatedUser = await editUser(userId, req.body);
 		if (!updatedUser) {
 			throw new NotFoundError(`No user with id ${userId}`);
 		}

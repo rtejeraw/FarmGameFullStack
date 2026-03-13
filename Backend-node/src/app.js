@@ -5,6 +5,13 @@ import cors from "cors";
 import { xss } from "express-xss-sanitizer";
 import rateLimit from "express-rate-limit";
 
+//swagger
+//const swaggerUI = require("swagger-ui-express");
+import swaggerUI from "swagger-ui-express";
+//const YAML = require("yamljs");
+import YAML from "yamljs";
+const swaggerDoc = YAML.load("./src/swagger.yaml");
+
 const app = express();
 app.use(express.json());
 
@@ -25,6 +32,9 @@ app.use(
 app.use(helmet());
 app.use(cors());
 app.use(xss());
+
+// swagger
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
 
 // Routes
 import authRouter from "./routes/auth.js";
