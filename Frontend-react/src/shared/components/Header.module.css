@@ -5,7 +5,7 @@
 }
 
 .header h1 {
-	color: var(--primary-color);
+	color: var(--green-color);
 	font-size: 50px;
 	margin: 0;
 }
@@ -24,11 +24,11 @@
 }
 
 .navlink:hover {
-	color: var(--primary-color);
+	color: var(--green-color);
 }
 
 .navlink-active {
 	text-decoration: none;
-	color: var(--primary-color);
+	color: var(--green-color);
 	font-weight: bold;
 }

@@ -1,10 +1,10 @@
 import { useAuth } from "../../../shared/context/AuthContext";
-import { getUnits, buySellUnits } from "../api/marketApi";
+import { getUnits, buySellUnits, eatUnit } from "../api/marketApi";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export const useMarket = () => {
-	const { setLoading, setError, setUnits } = useAuth();
+	const { state, setLoading, setError, setUnits, refetchContext } = useAuth();
 
 	useEffect(() => {
 		const controller = new AbortController();
@@ -55,6 +55,7 @@ export const useMarket = () => {
 					? "The purchase was a success"
 					: "The sale was a success.",
 			);
+			refetchContext();
 		} catch (err) {
 			toast.error(err.message);
 		} finally {
@@ -79,6 +80,24 @@ export const useMarket = () => {
 					? "The purchase was a success"
 					: "The sale was a success.",
 			);
+			refetchContext();
+		} catch (err) {
+			toast.error(err.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const consumeUnit = async ({ inventory, unit }) => {
+		try {
+			setLoading(true);
+
+			await eatUnit({
+				inventory: inventory,
+				unit: unit,
+			});
+			toast.success("The energy gain was a success.");
+			refetchContext();
 		} catch (err) {
 			toast.error(err.message);
 		} finally {
@@ -87,7 +106,9 @@ export const useMarket = () => {
 	};
 
 	return {
+		state,
 		useBuyUnits,
 		useSellUnits,
+		consumeUnit,
 	};
 };

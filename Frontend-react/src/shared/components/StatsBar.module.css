@@ -6,7 +6,11 @@
 	& div {
 		display: flex;
 		align-items: center;
-		gap: 0px 40px;
+		gap: 0px 30px;
+	}
+	& p {
+		font-size: 28px;
+		color: var(--inactive-color);
 	}
 }
 .element {
