@@ -16,7 +16,7 @@ import authenticationMiddleware from "./middlewares/authentication.js";
 app.set("trust proxy", 1);
 app.use(
 	rateLimit({
-		windowMs: 15 * 60 * 1000,
+		windowMs: 1 * 60 * 1000,
 		max: 100,
 		standardHeaders: true,
 		legacyHeaders: false,

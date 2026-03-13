@@ -1,7 +1,7 @@
 .container {
 	margin-top: 20px;
 	padding: 10px;
-	background-color: var(--assent2-color);
+	background-color: var(--dark-color);
 	border-top: 6px solid var(--green-color);
 	width: 280px;
 	display: flex;

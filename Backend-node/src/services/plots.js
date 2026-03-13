@@ -4,10 +4,11 @@ import { findUser, editUser } from "./users.js";
 import { findUnit, findUnitBy } from "./units.js";
 import { editInventory, findInventory } from "./inventory.js";
 import CustomAPIError from "../errors/custom-api.js";
-import mongoose from "mongoose";
 
-export const findPlots = async () => {
-	return await Plot.find()
+export const findPlots = async (userId) => {
+	return await Plot.find({
+		user: userId,
+	})
 		.populate({ path: "unit", strictPopulate: false })
 		.sort("createdAt");
 };
@@ -23,15 +24,16 @@ export const findPlot = async (plotId) => {
 };
 
 export const editPlot = async (plotId, data) => {
-	const plot = await Plot.findOneAndUpdate(
-		{
-			_id: plotId,
-		},
-		data,
-		{ new: true, runValidators: true },
-	);
+	try {
+		const plot = await Plot.findByIdAndUpdate(plotId, data, {
+			new: true,
+			runValidators: false,
+		});
 
-	return plot;
+		return plot;
+	} catch (err) {
+		console.log(err.message);
+	}
 };
 
 export const removePlot = async (plotId) => {
@@ -40,20 +42,21 @@ export const removePlot = async (plotId) => {
 
 export const plantUnitPlot = async (plotId, unitId) => {
 	const plot = await findPlot(plotId);
-	if (!plot) throw NotFoundError(`No plot with id ${plotId}`);
+	if (!plot) throw new NotFoundError(`No plot with id ${plotId}`);
 
 	const userId = plot.user;
 	const user = await findUser(userId);
-	if (!user) throw NotFoundError(`No user with id ${userId}`);
+	if (!user) throw new NotFoundError(`No user with id ${userId}`);
 
 	const unit = await findUnit(unitId);
-	if (!unit) throw NotFoundError(`No unit with id ${unitId}`);
+	if (!unit) throw new NotFoundError(`No unit with id ${unitId}`);
 
 	const inventory = await findInventory(userId);
-	if (!inventory) throw NotFoundError(`No inventory with userId ${userId}`);
+	if (!inventory)
+		throw new NotFoundError(`No inventory with userId ${userId}`);
 
 	//Check costs
-	const newEnergy = user.energy - unit.energyCost;
+	const newEnergy = user.energy - unit.energyCost / 2;
 	if (newEnergy < 0) throw new CustomAPIError("Not enough energy");
 
 	switch (unit.type) {
@@ -80,50 +83,58 @@ export const plantUnitPlot = async (plotId, unitId) => {
 	editInventory(inventory._id, unitId, -1);
 
 	//Update plot
-	return editPlot(plotId, { unit: unitId });
+	let newUnit;
+
+	switch (unit.name) {
+		case "Cabbage Seed":
+			newUnit = await findUnitBy({ name: "Cabbage" });
+			break;
+		case "Carrot Seed":
+			newUnit = await findUnitBy({ name: "Carrot" });
+			break;
+		case "Sheep Breed":
+			newUnit = await findUnitBy({ name: "Sheep" });
+			break;
+		case "Cow Breed":
+			newUnit = await findUnitBy({ name: "Cow" });
+			break;
+		default:
+			break;
+	}
+
+	if (!newUnit) throw new NotFoundError("Unit not found.");
+
+	return editPlot(plotId, { unit: newUnit._id });
 };
 
 export const harvestUnitPlot = async (plotId) => {
 	const plot = await findPlot(plotId);
-	if (!plot) throw NotFoundError(`No plot with id ${plotId}`);
+	if (!plot) throw new NotFoundError(`No plot with id ${plotId}`);
 
 	const userId = plot.user;
 	const user = await findUser(userId);
-	if (!user) throw NotFoundError(`No user with id ${userId}`);
+	if (!user) throw new NotFoundError(`No user with id ${userId}`);
 
-	const unitId = plot.unit;
+	const unitId = plot.unit?._id;
+	if (!unitId) throw new NotFoundError(`No unit with id ${unitId}`);
+
 	const unit = await findUnit(unitId);
-	if (!unit) throw NotFoundError(`No unit with id ${unitId}`);
+	if (!unit) throw new NotFoundError(`No unit with id ${unitId}`);
 
 	const inventory = await findInventory(userId);
-	if (!inventory) throw NotFoundError(`No inventory with userId ${userId}`);
+	if (!inventory)
+		throw new NotFoundError(`No inventory with userId ${userId}`);
 
 	//Check costs
-	const newEnergy = user.energy - unit.energyCost;
+	const newEnergy = user.energy - unit.energyCost / 2;
 	if (newEnergy < 0) throw new CustomAPIError("Not enough energy");
-
-	let addedUnitId = "";
-	switch (unit.name) {
-		case "Cabbage Seed":
-			addedUnitId = (await findUnitBy({ name: "Cabbage Crop" }))._id;
-			break;
-		case "Carrot Seed":
-			addedUnitId = (await findUnitBy({ name: "Carrot Crop" }))._id;
-			break;
-		case "Sheep Breed":
-			addedUnitId = (await findUnitBy({ name: "Sheep" }))._id;
-			break;
-		case "Cow Breed":
-			addedUnitId = (await findUnitBy({ name: "Cow" }))._id;
-			break;
-	}
 
 	//Decrease user energy
 	editUser(userId, { energy: newEnergy });
 
 	//Increase user inventory
-	editInventory(inventory._id, addedUnitId, 1);
+	editInventory(inventory._id, unitId, 1);
 
 	//Update plot
-	return editPlot(plotId, { unit: null });
+	editPlot(plotId, { unit: null });
 };

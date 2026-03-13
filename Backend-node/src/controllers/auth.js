@@ -17,12 +17,7 @@ const register = async (req, res) => {
 	//Create inventory
 	await createInventory(user.id);
 	//Create default plots
-	// let i = 0;
-	// while (i < 5) {
-	// 	newPlot({ body: { user: user._id } });
-	// 	i++;
-	// }
-	for (let i = 0; i < 5; i++) {
+	for (let i = 0; i < 9; i++) {
 		await createPlot({ user: user._id });
 	}
 

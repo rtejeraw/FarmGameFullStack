@@ -12,7 +12,15 @@ import {
 
 const getPlots = async (req, res) => {
 	try {
-		const plots = await findPlots();
+		const authHeader = req.headers.authorization;
+		if (!authHeader || !authHeader.startsWith("Bearer ")) {
+			throw new UnauthenticatedError("No token provided");
+		}
+
+		const token = authHeader.split(" ")[1];
+		const payload = JSON.parse(atob(token.split(".")[1]));
+
+		const plots = await findPlots(payload.userId);
 		res.status(StatusCodes.OK).json({ count: plots.length, plots });
 	} catch (error) {
 		res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
@@ -45,16 +53,10 @@ const newPlot = async (req, res) => {
 
 const updatePlot = async (req, res) => {
 	try {
-		const {
-			params: { id: plotId },
-			body: { plot },
-		} = req;
+		const { id: plotId } = req.params;
+		const data = req.body;
 
-		if (plot === "") {
-			throw new BadRequestError("Plot field cannot be empty");
-		}
-
-		const updatedPlot = await editPlot(plotId, plot);
+		const updatedPlot = await editPlot(plotId, data);
 		if (!updatedPlot) {
 			throw new NotFoundError(`No plot with id ${plotId}`);
 		}
@@ -103,10 +105,7 @@ const harvestUnit = async (req, res) => {
 			params: { id: plotId },
 		} = req;
 
-		const plot = await harvestUnitPlot(plotId);
-		if (!plot) {
-			throw new NotFoundError(`No plot with id ${plotId}`);
-		}
+		await harvestUnitPlot(plotId);
 
 		res.status(StatusCodes.OK).json({ msg: "The unit was harvested." });
 	} catch (error) {

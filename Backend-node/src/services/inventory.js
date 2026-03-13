@@ -1,5 +1,6 @@
 import Inventory from "../models/Inventory.js";
 import { editUser, findUser } from "./users.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
 import { findUnit } from "./units.js";
 
 export const createInventory = async (userId) => {
@@ -85,9 +86,12 @@ export const consumeInventory = async (inventoryId, unitId) => {
 	const unit = await findUnit(unitId);
 	if (!unit) throw new NotFoundError(`No unit with id ${unitId}`);
 
-	const newEnergy = user.energy + unit.energyCost;
-	const user = await editUser(inventory.user, { energy: newEnergy });
+	const user = await findUser(inventory.user);
 	if (!user) throw new NotFoundError(`No user with id ${inventory.user}`);
+
+	const newEnergy = user.energy + unit.energyCost;
+	const editedUser = await editUser(inventory.user, { energy: newEnergy });
+	if (!user) throw new NotFoundError(`No user with id ${editedUser._id}`);
 
 	return await editInventory(inventoryId, unitId, -1);
 };

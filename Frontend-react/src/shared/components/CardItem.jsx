@@ -7,6 +7,7 @@ export default function CardItem({
 	user,
 	item,
 	amount,
+	plotId,
 	action,
 	callBack,
 }) {
@@ -63,27 +64,36 @@ export default function CardItem({
 					)}
 				</div>
 			</div>
-			<hr />
-			<div className={`${styles["actions"]}`}>
-				<Select
-					onChange={(e) => setSelectAmount(e.target.value)}
-				></Select>
-				<Button
-					type="submit"
-					fullWidth
-					onClick={() => {
-						if (callBack !== undefined)
-							callBack({
-								inventory: inventory._id,
-								user: user,
-								unit: item._id,
-								amount: selectAmount,
-							});
-					}}
-				>
-					{action}
-				</Button>
-			</div>
+			{callBack ? (
+				<div className={`${styles["actions"]}`}>
+					{action === "Buy" || action === "Sell" ? (
+						<Select
+							onChange={(e) => setSelectAmount(e.target.value)}
+						></Select>
+					) : (
+						<></>
+					)}
+					<Button
+						type="submit"
+						fullWidth
+						onClick={() => {
+							if (callBack !== undefined)
+								callBack({
+									inventory: inventory?._id,
+									user: user,
+									unit: item._id,
+									amount: selectAmount,
+									plotId: plotId,
+									unitId: item._id,
+								});
+						}}
+					>
+						{action}
+					</Button>
+				</div>
+			) : (
+				<div></div>
+			)}
 		</div>
 	);
 }

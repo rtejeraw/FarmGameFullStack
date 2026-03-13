@@ -2,12 +2,17 @@ import styles from "./Market.module.css";
 import CardList from "../../../shared/components/CardList";
 import { useMarket } from "../hooks/useMarket";
 import { useUser } from "../../user/hooks/useUser";
-import { useAuth } from "../../../shared/context/AuthContext";
 
 export default function Market() {
-	const { state } = useAuth();
-	const { useBuyUnits, useSellUnits } = useMarket();
+	const { state, useBuyUnits, useSellUnits } = useMarket();
 	useUser();
+
+	const sellableItems = [
+		...(state.inventory?.seeds || []),
+		...(state.inventory?.breeds || []),
+		...(state.inventory?.crops || []),
+		...(state.inventory?.animals || []),
+	];
 
 	return (
 		<div className={styles["container"]}>
@@ -21,29 +26,31 @@ export default function Market() {
 				</p>
 			</div>
 
-			<div className={styles["section"]}>
-				<h2>Buy seeds/breeds</h2>
-				<CardList
-					inventory={state.inventory}
-					user={state.user}
-					items={state.units}
-					action="Buy"
-					callBack={useBuyUnits}
-				/>
-			</div>
-			<div className={styles["section"]}>
-				<h2>Sell products</h2>
-				{state.inventory && state.inventory.seeds.length > 0 ? (
+			<div className={styles["section-container"]}>
+				<div className={styles["section"]}>
+					<h2>Buy seeds/breeds</h2>
 					<CardList
 						inventory={state.inventory}
 						user={state.user}
-						items={state.inventory.seeds}
-						action="Sell"
-						callBack={useSellUnits}
+						items={state.units}
+						action="Buy"
+						callBack={useBuyUnits}
 					/>
-				) : (
-					<p>No items to sell.</p>
-				)}
+				</div>
+				<div className={styles["section"]}>
+					<h2>Sell products</h2>
+					{state.inventory && sellableItems.length > 0 ? (
+						<CardList
+							inventory={state.inventory}
+							user={state.user}
+							items={sellableItems}
+							action="Sell"
+							callBack={useSellUnits}
+						/>
+					) : (
+						<p>No items to sell.</p>
+					)}
+				</div>
 			</div>
 		</div>
 	);

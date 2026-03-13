@@ -1,8 +1,10 @@
 import { api } from "../../../shared/services/api";
 
-export const getInventory = async ({ signal } = {}) => {
+export const getPlots = async ({ signal } = {}) => {
 	try {
-		const response = await api.get("/inventory", { signal });
+		const response = await api.get("/plots", {
+			signal,
+		});
 
 		return response.data;
 	} catch (error) {
@@ -17,16 +19,33 @@ export const getInventory = async ({ signal } = {}) => {
 	}
 };
 
-export const getUser = async (userId) => {
+export const plantUnitPlot = async ({ plotId, unitId }) => {
 	try {
-		const response = await api.get(`/users/${userId}`);
+		const body = {
+			unit: unitId,
+		};
 
-		return response.data.user;
+		const response = await api.post(`/plots/plant/${plotId}`, body);
+
+		return response.data;
 	} catch (error) {
 		if (error.name === "CanceledError" || error.code === "ERR_CANCELED") {
 			console.log("Petición cancelada (esperado en StrictMode dev)");
 			return null;
 		}
+		if (error.response?.data?.message) {
+			throw new Error(error.response.data.message);
+		}
+		throw new Error("Error al conectar con el servidor");
+	}
+};
+
+export const harvestUnitPlot = async ({ plotId }) => {
+	try {
+		const response = await api.delete(`/plots/plant/${plotId}`);
+
+		return response.data;
+	} catch (error) {
 		if (error.response?.data?.message) {
 			throw new Error(error.response.data.message);
 		}

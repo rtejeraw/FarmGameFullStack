@@ -13,16 +13,18 @@ function StatsBar({ Currency, Energy, states }) {
 				<div className={styles["statsBar"]}>
 					<div>
 						<h2>Welcome,</h2>
-						<p>{/* <b>{states.user.name}</b> */}</p>
+						<p>
+							<b>{states.user?.name || "Cargando..."}</b>
+						</p>
 					</div>
 					<div>
 						<div className={styles["element"]}>
 							<h4>Currency</h4>
-							<p>{Currency}</p>
+							<p>{states.user?.coins}</p>
 						</div>
 						<div className={styles["element"]}>
 							<h4>Energy</h4>
-							<p>{Energy}</p>
+							<p>{states.user?.energy}</p>
 						</div>
 						<Button
 							onClick={() => {
