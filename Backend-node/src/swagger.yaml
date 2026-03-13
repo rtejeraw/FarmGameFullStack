@@ -1,0 +1,563 @@
+openapi: 3.0.0
+info:
+    title: CTD-FarmGame-API
+    version: 1.0.0
+    description: ""
+servers:
+    - url: "http://localhost:3000/api/v1"
+paths:
+    /auth/login:
+        post:
+            tags:
+                - Auth
+            summary: Login
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+                        example:
+                            email: zeke@gmail.com
+                            password: password
+    /auth/register:
+        post:
+            tags:
+                - Auth
+            summary: Register
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+                        example:
+                            name: zeke
+                            email: zeke@gmail.com
+                            password: password
+    /users:
+        get:
+            tags:
+                - User
+            summary: Get users List
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /users/{id}:
+        get:
+            tags:
+                - User
+            summary: Get user data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The user ID
+
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        patch:
+            tags:
+                - User
+            summary: Update user data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The user ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                energy:
+                                    type: number
+                                coins:
+                                    type: number
+                        example:
+                            energy: 120
+                            coins: 100
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        delete:
+            tags:
+                - User
+            summary: Delete user
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The user ID
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /units:
+        get:
+            tags:
+                - Unit
+            summary: Get units List
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        post:
+            tags:
+                - Unit
+            summary: Add a new unit
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                description:
+                                    type: string
+                                type:
+                                    type: string
+                                    enum:
+                                        - Seed
+                                        - Crop
+                                        - Breed
+                                        - Animal
+                                energyCost:
+                                    type: number
+                                coinCost:
+                                    type: number
+                                timeToGrow:
+                                    type: number
+                        example:
+                            name: Cow
+                            description: Cow
+                            type: Animal
+                            energyCost: 40
+                            coinCost: 120
+                            timeToGrow: 4
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /units/{id}:
+        get:
+            tags:
+                - Unit
+            summary: Get unit data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The unit ID
+
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        patch:
+            tags:
+                - Unit
+            summary: Update unit data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The user ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                description:
+                                    type: string
+                                type:
+                                    type: string
+                                    enum:
+                                        - Seed
+                                        - Crop
+                                        - Breed
+                                        - Animal
+                                energyCost:
+                                    type: number
+                                coinCost:
+                                    type: number
+                                timeToGrow:
+                                    type: number
+                        example:
+                            name: Cow
+                            description: Cow
+                            type: Animal
+                            energyCost: 40
+                            coinCost: 120
+                            timeToGrow: 4
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        delete:
+            tags:
+                - Unit
+            summary: Delete unit
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The unit ID
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /inventory:
+        get:
+            tags:
+                - Inventory
+            summary: Get user inventory
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        post:
+            tags:
+                - Inventory
+            summary: Add a new inventory
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                user:
+                                    type: string
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /inventory/{id}:
+        patch:
+            tags:
+                - Inventory
+            summary: Update inventory data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The inventory ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                unit:
+                                    type: string
+                                amount:
+                                    type: number
+                        example:
+                            unit: unit id
+                            amount: 1
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        delete:
+            tags:
+                - Inventory
+            summary: Delete inventory
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The inventory ID
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /inventory/units/{id}:
+        post:
+            tags:
+                - Inventory
+            summary: Buy or sell a unit (amount can be negative to sell)
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The inventory ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                user:
+                                    type: string
+                                unit:
+                                    type: string
+                                amount:
+                                    type: number
+                        example:
+                            user: user id
+                            unit: unit id
+                            amount: 1
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        delete:
+            tags:
+                - Inventory
+            summary: Consume a unit
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The inventory ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                unit:
+                                    type: string
+                        example:
+                            unit: unit id
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /plots:
+        get:
+            tags:
+                - Plot
+            summary: Get plots List
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        post:
+            tags:
+                - Plot
+            summary: Add a new plot
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                user:
+                                    type: string
+                        example:
+                            user: user Id
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /plots/{id}:
+        get:
+            tags:
+                - Plot
+            summary: Get plot data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The plot ID
+
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        patch:
+            tags:
+                - Plot
+            summary: Update plot data
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The plot ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                unit:
+                                    type: string
+                        example:
+                            unit: unit id
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        delete:
+            tags:
+                - Plot
+            summary: Delete plot
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The plot ID
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+    /plots/plant/{id}:
+        post:
+            tags:
+                - Plot
+            summary: Plant a unit in a plot
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The plot ID
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                unit:
+                                    type: string
+                        example:
+                            unit: unit Id
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+        delete:
+            tags:
+                - Plot
+            summary: Harvest a unit from a plot
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+                  description: The plot ID
+            responses:
+                "200":
+                    description: ""
+                    headers: {}
+            security:
+                - BearerAuth: []
+
+components:
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+tags:
+    - name: Auth
+      description: ""
+    - name: User
+      description: ""
+    - name: Unit
+      description: ""
+    - name: Inventory
+      description: ""
+    - name: Plot
+      description: ""

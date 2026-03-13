@@ -49,10 +49,9 @@ const updateUnit = async (req, res) => {
 	try {
 		const {
 			params: { id: unitId },
-			body: { unit },
 		} = req;
 
-		const updatedUnit = await editUnit(unitId, unit);
+		const updatedUnit = await editUnit(unitId, req.body);
 		if (!updatedUnit) {
 			throw new NotFoundError(`No unit with id ${unitId}`);
 		}
