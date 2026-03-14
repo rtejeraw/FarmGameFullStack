@@ -1,18 +1,36 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "node:path";
 
 // https://vite.dev/config/
 export default defineConfig({
 	plugins: [react()],
+
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src"),
+
+			// alias: [
+			//   { find: '@', replacement: path.resolve(__dirname, './src') },
+			//   { find: '@/', replacement: path.resolve(__dirname, './src') + '/' },
+			// ],
+		},
+	},
+
 	server: {
 		proxy: {
-			// Todas las peticiones que empiecen con /api
-			// se redirigen al backend
 			"/api": {
 				target: "http://localhost:3000",
 				changeOrigin: true,
 				secure: false,
 			},
+		},
+	},
+
+	build: {
+		sourcemap: true,
+		rollupOptions: {
+			// external: [/^node:.*/],
 		},
 	},
 });
