@@ -8,7 +8,7 @@ import StatsBar from "./shared/components/StatsBar";
 
 import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
-import Market from "./features/market/pages/market";
+import Market from "./features/market/pages/Market";
 import Home from "./features/home/pages/Home";
 import About from "./features/about/pages/About";
 import Land from "./features/land/pages/Land";
